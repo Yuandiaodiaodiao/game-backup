@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+    <el-button @click="backupNow">立刻备份</el-button>
+    <el-checkbox v-model="useBackup">自动备份</el-checkbox>
+    <el-button @click="rebackNow">立刻回档</el-button>
+
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            visible: false,
+            useBackup: false
+        },
+        methods: {
+            async backupNow() {
+                const res = await axios.post("/startBackup", {
+                    backUpNow: true
+                })
+                this.$message({
+                    message: res.data,
+                    type: 'success'
+                });
+            },
+            async rebackNow() {
+                const res = await axios.post("/startBackup", {
+                    reBack: true
+                })
+                this.$message({
+                    message: res.data,
+                    type: 'success'
+                });
+            }
+        },
+        watch: {
+            async useBackup(newValue, oldValue) {
+                console.log("修改备份状态")
+                console.log(newValue)
+                if (newValue === true) {
+                    console.log("备份开启")
+                    const res = await axios.post("/startBackup", {
+                        start: true
+                    })
+                    this.$message({
+                        message: res.data,
+                        type: 'success'
+                    });
+                }
+                if(newValue===false){
+                     console.log("备份关闭")
+                    const res = await axios.post("/startBackup", {
+                        start: false
+                    })
+                    this.$message({
+                        message: res.data,
+                        type: 'success'
+                    });
+                }
+            }
+        }
+
+
+    })
+</script>
+</html>
