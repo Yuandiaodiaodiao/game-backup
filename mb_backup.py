@@ -4,6 +4,11 @@ import time
 import os
 import shutil
 FILENAME='save_auto.sav'
+print("输入监控文件名(默认为save_auto.sav 敲回车使用默认):\n")
+i=input()
+if len(i)>0:
+    FILENAME=i
+print(f"正在监控{FILENAME}")
 class FileHandler(FileSystemEventHandler):
 
     def on_modified(self, event):
